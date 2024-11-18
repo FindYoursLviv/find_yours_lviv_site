@@ -9,7 +9,7 @@ const file_include = require('gulp-file-include');
 const gulp = require("gulp");
 const imagemin = require('gulp-imagemin');
 const autoprefixer = require('autoprefixer');
-
+const nodemon = require('nodemon');
 
 // Minify SCSS
 gulp.task('minify-scss', () => {
@@ -65,14 +65,9 @@ gulp.task('watch', () => {
     gulp.watch('app/images/*', gulp.series('img'));
 });
 
-// Update browser
-gulp.task('browser-sync', () => {
-    browserSync.init({
-        server: {
-            baseDir: './dist',
-        }
-    });
-    gulp.watch('./dist').on('change', browserSync.reload);
-});
+// Run server for API
+gulp.task('server',()=>{
+    nodemon({script:'server.js'});
+})
 
-gulp.task('default', gulp.series('html', 'sass', 'uglify', 'img', gulp.parallel('browser-sync','watch')));
+gulp.task('default', gulp.series('html', 'sass', 'uglify', 'img', gulp.parallel('watch','server')));
